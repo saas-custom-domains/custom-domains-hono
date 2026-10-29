@@ -6,9 +6,17 @@ updates:
     groups:
       hono:
         patterns: ["hono", "@hono/*"]
+    ignore:
+      # Types for the Node.js version in the Dockerfile.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: weekly }
   - package-ecosystem: docker
     directory: /
     schedule: { interval: weekly }
+    ignore:
+      # Stay on the Node.js LTS line; move majors by hand.
+      - dependency-name: node
+        update-types: ["version-update:semver-major"]
