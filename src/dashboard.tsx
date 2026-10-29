@@ -32,8 +32,10 @@ dashboard.post('/webhooks/saascustomdomains', async (c) => {
     event: string
     domain?: { uuid?: string }
   }>()
-  const domain = payload?.uuid ? findDomainByProviderUuid(payload.uuid) : null
-  // Not ours, or already removed: acknowledge so it isn't retried.
+  const domain = payload?.uuid
+    ? findDomainByProviderUuid(payload.uuid)
+    : null
+  // Not ours, or already removed: acknowledge it anyway.
   if (!domain) return c.body(null, 204)
 
   switch (event) {
@@ -56,7 +58,10 @@ dashboard.post('/webhooks/saascustomdomains', async (c) => {
 // Behind a load balancer that terminates TLS, c.req.url starts with
 // http:// while the browser's Origin starts with https://.
 dashboard.use(
-  csrf({ origin: (origin, c) => origin === publicOrigin(c, new URL(c.req.url).host) }),
+  csrf({
+    origin: (origin, c) =>
+      origin === publicOrigin(c, new URL(c.req.url).host),
+  }),
 )
 dashboard.use(renderer)
 

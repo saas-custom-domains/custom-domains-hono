@@ -2,7 +2,7 @@
 
 An example Hono app where each customer connects their own domain. It's a small API docs product, Refdocs: every API company gets a docs site, and can serve it on `docs.theircompany.com` instead of a Refdocs URL. Pages are rendered on the server with `hono/jsx`.
 
-It goes with the guide [How to Add Custom Domains to a Hono App](https://saascustomdomains.com/blog/posts/custom-domains-hono).
+It goes with the guide [How to Add Custom Domains to a Multi-Tenant Hono App](https://saascustomdomains.com/blog/posts/custom-domains-hono).
 
 What's in it:
 

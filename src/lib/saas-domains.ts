@@ -24,12 +24,15 @@ export class SaasDomainsError extends Error {
   }
 }
 
-async function request<T>(method: string, path = '', body?: object): Promise<T> {
-  const account = process.env.SCD_ACCOUNT_UUID
-  const upstream = process.env.SCD_UPSTREAM_UUID
+async function request<T>(
+  method: string,
+  path = '',
+  body?: object,
+): Promise<T> {
   const url =
-    `${API_URL}/api/v1/accounts/${account}` +
-    `/upstreams/${upstream}/custom_domains${path}`
+    `${API_URL}/api/v1/accounts/${process.env.SCD_ACCOUNT_UUID}` +
+    `/upstreams/${process.env.SCD_UPSTREAM_UUID}` +
+    `/custom_domains${path}`
 
   const res = await fetch(url, {
     method,
@@ -40,22 +43,25 @@ async function request<T>(method: string, path = '', body?: object): Promise<T> 
     body: body && JSON.stringify(body),
     signal: AbortSignal.timeout(10_000),
   })
-  if (!res.ok) throw new SaasDomainsError(res.status, await res.text())
+  if (!res.ok) {
+    throw new SaasDomainsError(res.status, await res.text())
+  }
   return (await res.json()) as T
 }
 
-export function createDomain(host: string, instructionsRecipient?: string) {
+// With a recipient, we email that address the DNS records to add.
+export function createDomain(host: string, recipient?: string) {
   return request<DomainResponse>('POST', '', {
     host,
-    // We email this address the exact DNS records to add.
-    ...(instructionsRecipient && {
-      instructions_recipient: instructionsRecipient,
-    }),
+    ...(recipient && { instructions_recipient: recipient }),
   })
 }
 
 export function verifyDns(uuid: string) {
-  return request<VerifyResponse>('POST', `/${uuid}/verify_dns_records`)
+  return request<VerifyResponse>(
+    'POST',
+    `/${uuid}/verify_dns_records`,
+  )
 }
 
 export async function deleteDomain(uuid: string) {

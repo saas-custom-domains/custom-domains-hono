@@ -1,6 +1,10 @@
 // "Docs.Acme.com." and "docs.acme.com:443" are the same host.
 export function normalizeHost(input: string): string {
-  return input.trim().toLowerCase().replace(/:\d+$/, '').replace(/\.$/, '')
+  return input
+    .trim()
+    .toLowerCase()
+    .replace(/:\d+$/, '')
+    .replace(/\.$/, '')
 }
 
 function hostList(value: string | undefined): string[] {

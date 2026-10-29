@@ -6,7 +6,11 @@ import type { Context } from 'hono'
 // "http://<your own host>". Pass the host the browser used; the scheme
 // comes from X-Forwarded-Proto, which SaaS Custom Domains sets to https.
 export function publicOrigin(c: Context, host: string): string {
-  const forwarded = c.req.header('x-forwarded-proto')?.split(',')[0]?.trim()
-  const scheme = forwarded || new URL(c.req.url).protocol.slice(0, -1)
+  const forwarded = c.req
+    .header('x-forwarded-proto')
+    ?.split(',')[0]
+    ?.trim()
+  const scheme =
+    forwarded || new URL(c.req.url).protocol.slice(0, -1)
   return `${scheme}://${host}`
 }
