@@ -12,8 +12,8 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@hono/node-server": "2.1.5",
-    "hono": "4.13.14"
+    "@hono/node-server": "2.1.6",
+    "hono": "4.13.16"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",
